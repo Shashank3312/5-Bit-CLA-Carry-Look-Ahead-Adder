@@ -1,0 +1,79 @@
+* SPICE3 file created from NAND4.ext - technology: scmos
+.include TSMC_180nm.txt
+.param SUPPLY=1.8
+.global gnd vdd
+.param LAMBDA=0.09u
+.param width_N=1.8u
+.param width_P=2*width_N
+.param L=2*LAMBDA
+
+Va a gnd PULSE(0 1.8   0n 0n 0n   50n 100n)
+Vb b gnd PULSE(0 1.8  10n 0n 0n   50n 100n)
+Vc c gnd PULSE(0 1.8  20n 0n 0n   50n 100n)
+Vd d gnd PULSE(0 1.8  30n 0n 0n   50n 100n)
+VDD vdd gnd 1.8
+.option scale=0.09u
+
+M1000 a_13_n11# A out Gnd CMOSN w=80 l=2
++  ad=480 pd=172 as=400 ps=170
+M1001 vdd B out w_0_81# CMOSP w=40 l=2
++  ad=640 pd=272 as=480 ps=184
+M1002 a_29_n11# C a_21_n11# Gnd CMOSN w=80 l=2
++  ad=480 pd=172 as=480 ps=172
+M1003 gnd D a_29_n11# Gnd CMOSN w=80 l=2
++  ad=400 pd=170 as=0 ps=0
+M1004 out C vdd w_0_81# CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1005 out A vdd w_0_81# CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1006 vdd D out w_0_81# CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1007 a_21_n11# B a_13_n11# Gnd CMOSN w=80 l=2
++  ad=0 pd=0 as=0 ps=0
+C0 vdd D 0.10fF
+C1 a_29_n11# a_21_n11# 0.82fF
+C2 A w_0_81# 0.08fF
+C3 out a_29_n11# 0.03fF
+C4 A out 0.08fF
+C5 C w_0_81# 0.08fF
+C6 vdd w_0_81# 0.18fF
+C7 D w_0_81# 0.08fF
+C8 out C 0.08fF
+C9 out vdd 1.70fF
+C10 a_21_n11# a_13_n11# 0.82fF
+C11 out a_13_n11# 0.85fF
+C12 out a_21_n11# 0.03fF
+C13 out w_0_81# 0.05fF
+C14 A B 0.20fF
+C15 B C 0.20fF
+C16 B vdd 0.10fF
+C17 B w_0_81# 0.08fF
+C18 B out 0.08fF
+C19 gnd a_29_n11# 0.87fF
+C20 gnd a_13_n11# 0.04fF
+C21 gnd a_21_n11# 0.04fF
+C22 A vdd 0.10fF
+C23 C vdd 0.10fF
+C24 C D 0.20fF
+C25 gnd Gnd 0.23fF
+C26 a_29_n11# Gnd 0.01fF
+C27 a_21_n11# Gnd 0.01fF
+C28 a_13_n11# Gnd 0.01fF
+C29 out Gnd 0.18fF
+C30 vdd Gnd 0.10fF
+C31 D Gnd 0.09fF
+C32 C Gnd 0.09fF
+C33 B Gnd 0.09fF
+C34 A Gnd 0.09fF
+C35 w_0_81# Gnd 2.51fF
+
+.control
+
+run
+tran 0.1n 300n
+set curplottitle="2024102057  4-input NAND Gate using CMOS"
+plot v(a) v(b)+2 v(c)+4 v(d)+6 v(out)+8
+
+.endc
+
+.end

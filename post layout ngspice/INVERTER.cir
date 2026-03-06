@@ -1,0 +1,36 @@
+* SPICE3 file created from INVERTER.ext - technology: scmos
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param width_N={20*LAMBDA}
+.param width_P={40*LAMBDA}
+.global gnd vdd
+.PARAM VDD_val = 1.8
+
+V_A A gnd PULSE(0 {VDD_val} 2n 100p 100p 16n 32n)
+VDD vdd gnd 1.8
+.option scale=0.09u
+
+M1000 out A Vdd w_n6_n6# CMOSP w=40 l=2
++  ad=200 pd=90 as=200 ps=90
+M1001 out A gnd Gnd CMOSN w=20 l=2
++  ad=100 pd=50 as=100 ps=50
+C0 out w_n6_n6# 0.06fF
+C1 A Vdd 0.12fF
+C2 out gnd 0.25fF
+C3 w_n6_n6# Vdd 0.08fF
+C4 out Vdd 0.44fF
+C5 A w_n6_n6# 0.08fF
+C6 gnd Gnd 0.08fF
+C7 out Gnd 0.08fF
+C8 Vdd Gnd 0.05fF
+C9 A Gnd 0.16fF
+C10 w_n6_n6# Gnd 1.25fF
+
+.tran 10p 50n
+.control
+run
+set curplottitle="2024102057  Inverter Gate using CMOS"
+ 
+plot V(A) V(out)+2
+
+.endc

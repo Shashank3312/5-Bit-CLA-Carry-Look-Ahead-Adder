@@ -1,0 +1,108 @@
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param W=1.8u
+.param width_N=W
+.param width_P={2*W}
+.global gnd vdd
+
+VDD vdd gnd 1.8
+
+vclk clk gnd PULSE(0 1.8 0 100ps 100ps 7ns 14ns)
+VD D gnd PULSE(0 1.8 0 100ps 100ps 20ns 40ns)
+.option scale=0.09u
+
+M1000 out a_81_3# gnd Gnd CMOSN w=20 l=2
++  ad=100 pd=50 as=600 ps=280
+M1001 a_n1_80# D vdd w_n14_74# CMOSP w=40 l=2
++  ad=240 pd=92 as=800 ps=360
+M1002 out a_81_3# vdd w_137_58# CMOSP w=40 l=2
++  ad=200 pd=90 as=0 ps=0
+M1003 a_n1_26# clk a_n1_80# w_n14_74# CMOSP w=40 l=2
++  ad=200 pd=90 as=0 ps=0
+M1004 a_81_3# a_32_3# vdd w_83_74# CMOSP w=40 l=2
++  ad=200 pd=90 as=0 ps=0
+M1005 a_n1_26# D gnd Gnd CMOSN w=20 l=2
++  ad=100 pd=50 as=0 ps=0
+M1006 a_88_3# clk a_81_3# Gnd CMOSN w=40 l=2
++  ad=240 pd=92 as=200 ps=90
+M1007 a_39_3# a_n1_26# a_32_3# Gnd CMOSN w=40 l=2
++  ad=240 pd=92 as=200 ps=90
+M1008 a_32_3# clk vdd w_34_74# CMOSP w=40 l=2
++  ad=200 pd=90 as=0 ps=0
+M1009 gnd a_32_3# a_88_3# Gnd CMOSN w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1010 gnd clk a_39_3# Gnd CMOSN w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+C0 a_n1_26# gnd 0.25fF
+C1 a_81_3# w_137_58# 0.08fF
+C2 w_n14_74# a_n1_80# 0.01fF
+C3 a_32_3# gnd 0.10fF
+C4 vdd a_n1_80# 0.44fF
+C5 vdd w_137_58# 0.08fF
+C6 a_88_3# gnd 0.45fF
+C7 a_81_3# w_83_74# 0.06fF
+C8 a_39_3# gnd 0.45fF
+C9 clk a_n1_26# 0.07fF
+C10 vdd a_81_3# 0.99fF
+C11 vdd w_n14_74# 0.09fF
+C12 a_32_3# clk 0.46fF
+C13 vdd w_83_74# 0.08fF
+C14 vdd w_34_74# 0.11fF
+C15 a_32_3# a_n1_26# 0.18fF
+C16 a_81_3# gnd 0.10fF
+C17 D w_n14_74# 0.08fF
+C18 D vdd 0.10fF
+C19 w_137_58# out 0.06fF
+C20 a_32_3# a_39_3# 0.47fF
+C21 a_81_3# clk 0.19fF
+C22 a_n1_80# a_n1_26# 0.41fF
+C23 w_n14_74# clk 0.08fF
+C24 vdd out 0.44fF
+C25 vdd clk 0.48fF
+C26 w_34_74# clk 0.08fF
+C27 w_n14_74# a_n1_26# 0.06fF
+C28 a_32_3# a_81_3# 0.06fF
+C29 vdd a_n1_26# 0.03fF
+C30 a_32_3# w_83_74# 0.08fF
+C31 D clk 0.17fF
+C32 gnd out 0.25fF
+C33 a_81_3# a_88_3# 0.47fF
+C34 a_32_3# vdd 0.87fF
+C35 a_32_3# w_34_74# 0.06fF
+C36 a_88_3# Gnd 0.01fF
+C37 a_39_3# Gnd 0.01fF
+C38 out Gnd 0.08fF
+C39 gnd Gnd 0.87fF
+C40 a_81_3# Gnd 0.75fF
+C41 a_n1_26# Gnd 0.36fF
+C42 vdd Gnd 0.99fF
+C43 a_32_3# Gnd 0.92fF
+C44 clk Gnd 1.90fF
+C45 D Gnd 0.31fF
+C46 w_137_58# Gnd 1.25fF
+C47 w_83_74# Gnd 1.25fF
+C48 w_34_74# Gnd 1.25fF
+C49 w_n14_74# Gnd 1.67fF
+
+
+
+
+
+.tran 0.1n 100n 0.1ns
+
+.control
+run
+set curplottitle="2024102057  D Flip-Flop using CMOS"
+plot V(out) V(D)+2 V(clk)+4
+
+meas tran in_50_rise  WHEN v(d)=0.9 RISE=1
+meas tran w12_50_rise  WHEN v(x1)=0.9 FALL=1
+print (-in_50_rise+w12_50_rise)
+meas tran in_50_fall  WHEN v(d)=0.9 FALL=1
+meas tran w12_50_fall  WHEN v(x1)=0.9 RISE=1
+print (w12_50_fall - in_50_fall)
+
+
+.endc
+
+.end

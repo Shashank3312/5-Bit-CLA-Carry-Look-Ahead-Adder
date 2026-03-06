@@ -1,0 +1,45 @@
+
+.include TSMC_180nm.txt
+.param SUPPLY=1.8
+.global gnd vdd
+.param LAMBDA=0.09u
+.param width_N=1.8u
+.param width_P=2*width_N
+.param L=2*LAMBDA
+
+Va a gnd PULSE(0 1.8   0n 0n 0n  50n 100n)
+Vb b gnd PULSE(0 1.8  10n 0n 0n  50n 100n)
+Vc c gnd PULSE(0 1.8  20n 0n 0n  50n 100n)
+Vd d gnd PULSE(0 1.8  30n 0n 0n  50n 100n)
+Ve e gnd PULSE(0 1.8  40n 0n 0n  50n 100n)
+Vf f gnd PULSE(0 1.8  50n 0n 0n  50n 100n)  
+VDD vdd gnd 1.8
+
+.subckt NAND2 a b out vdd gnd
+M1 out a n1 gnd CMOSN W={width_N} L={L}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+M2 n1 b gnd gnd CMOSN W={width_N} L={L}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+M3 out a vdd vdd CMOSP W={width_P} L={L}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+M4 out b vdd vdd CMOSP W={width_P} L={L}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+.ends NAND2
+
+Xx1 a b nx_ab vdd gnd NAND2
+Xx2 a nx_ab nx_a vdd gnd NAND2
+Xx3 b nx_ab nx_b vdd gnd NAND2
+Xx4 nx_a nx_b out vdd gnd NAND2
+
+.control
+
+run
+tran 0.1n 300n
+
+set curplottitle="2024102057  2-input XOR Gate using NAND2 Gates"
+plot v(a) v(b)+2 v(out)+4
+
+
+.endc
+
+.end
